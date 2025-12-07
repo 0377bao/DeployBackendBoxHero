@@ -408,9 +408,16 @@ class OrderPurchaseService {
                         orderPurchaseDetail.requestedQuantity > orderPurchaseDetail.actualQuantity
                     ) {
                         // create new batch suggest for order purchase missing detail
-                        const count = await Batch.count();
-                        //const batchID = generateBatchID('B', count + 1);
-                        const batchID = generateBatchID('B', Math.floor(Math.random() * (1000 - 60 + 1)) + 60);
+                        const batchMaxLength = await Batch.findAll({
+                            attributes: ['batchID'],
+                            order: [['batchID', 'DESC']],
+                            limit: 1,
+                            transaction,
+                        });
+
+                        let maxNumber = parseInt(batchMaxLength[0].batchID ? batchMaxLength[0].batchID.slice(1) : 0);
+                        const batchID = generateBatchID('B', maxNumber + 1);
+
                         const qrCode = await generateQRURL(batchID);
                         const batchSuggest = await Batch.create(
                             {

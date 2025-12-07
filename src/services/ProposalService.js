@@ -83,12 +83,24 @@ class ProposalService {
                 let message = '';
                 if (data.status === 'APPROVED') {
                     message = 'Đề xuất đã được phê duyệt';
-                    const count = await Batch.count();
+                    const batchMaxLength = await Batch.findAll({
+                        attributes: ['batchID'],
+                        order: [['batchID', 'DESC']],
+                        limit: 1,
+                        transaction,
+                    });
+
+                    let maxNumber = parseInt(batchMaxLength[0].batchID ? batchMaxLength[0].batchID.slice(1) : 0);
+
                     // update batchID for proposal detail
-                    for (const proposalDetail of proposalDetails) {
-                        //const batchID = generateBatchID('B', count + 1);
-                        const batchID = generateBatchID('B', Math.floor(Math.random() * (1000 - 60 + 1)) + 60);
+                    for (let index = 0; index < proposalDetails.length; index++) {
+                        maxNumber += 1;
+                        const proposalDetail = proposalDetails[index];
+
+                        const batchID = generateBatchID('B', parseInt(maxNumber));
+
                         const qrCode = await generateQRURL(batchID);
+
                         const newBatch = await Batch.create(
                             {
                                 batchID,
@@ -101,7 +113,7 @@ class ProposalService {
                             { transaction },
                         );
 
-                        const updateBatchIDProposalDetail = await ProposalDetail.update(
+                        await ProposalDetail.update(
                             {
                                 batchIDQR: newBatch.qrCode,
                                 batchID: newBatch.batchID,

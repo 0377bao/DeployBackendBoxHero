@@ -7,7 +7,7 @@ const generateCode = (prefix) => {
 };
 
 const generateBatchID = (prefix, batchLength) => {
-    return `${prefix}${Number(batchLength) + 1}`;
+    return `${prefix}${Number(batchLength)}`;
 };
 
 const generateQRURL = async (text) => {
