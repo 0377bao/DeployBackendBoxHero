@@ -3,6 +3,7 @@ const Supplier = db.Supplier;
 const Product = db.Product;
 
 const HTTP_OK = process.env.HTTP_OK || 200;
+const HTTP_SERVER_ERROR = process.env.HTTP_SERVER_ERROR || 500;
 
 class SupplierService {
     async searchSuppliers(
@@ -55,7 +56,7 @@ class SupplierService {
         }
     }
 
-    async getAllSuppliers(page = 1, limit = 10, status = 'ACTIVE') {
+    async getAllSuppliers(page = 1, limit = 5, status = 'ACTIVE') {
         try {
             const offset = (page - 1) * limit;
             const { count, rows } = await Supplier.findAndCountAll({
@@ -189,6 +190,27 @@ class SupplierService {
             console.log(e);
             reject(e);
         }
+    }
+    async findSupplierByPhoneNumber(phone) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const supplier = await Supplier.findOne({ where: { phoneNumber: phone } });
+                resolve({
+                    statusHttp: HTTP_OK,
+                    status: 'OK',
+                    message: 'Lấy nhà cung cấp thành công',
+                    supplier,
+                });
+            } catch (e) {
+                console.log(e);
+                reject({
+                    statusHttp: HTTP_SERVER_ERROR,
+                    status: 'ERR',
+                    message: 'Lấy nhà cung cấp thất bại',
+                    error: e,
+                });
+            }
+        });
     }
 }
 

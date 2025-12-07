@@ -34,6 +34,14 @@ class CustomerController {
             return res.status(err.statusHttp || 500).json(err.message);
         }
     }
+    async getAllCustomersNotPagination(req, res) {
+        try {
+            const { statusHttp, ...response } = await CustomerService.getAllCustomersNotPagination();
+            return res.status(statusHttp).json(response);
+        } catch (err) {
+            return res.status(err.statusHttp || 500).json(err.message);
+        }
+    }
 }
 
 module.exports = new CustomerController();

@@ -168,6 +168,26 @@ class CustomerService {
             }
         });
     }
+    async getAllCustomersNotPagination() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const customers = await Customer.findAll();
+                resolve({
+                    status: 'OK',
+                    statusHttp: HTTP_OK,
+                    message: 'Lấy danh sách khách hàng thành công',
+                    data: customers,
+                });
+            } catch (error) {
+                console.error(error);
+                reject({
+                    status: 'ERR',
+                    statusHttp: HTTP_INTERNAL_SERVER_ERROR,
+                    message: 'Không thể lấy danh sách khách hàng',
+                });
+            }
+        });
+    }
 }
 
 module.exports = new CustomerService();
