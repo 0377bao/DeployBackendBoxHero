@@ -318,11 +318,12 @@ class DashboardService {
                         {
                             model: Batch,
                             as: 'batch',
-                            attributes: ['batchID', 'productID'],
+                            attributes: [],
                             include: [
                                 {
                                     model: Product,
                                     as: 'product',
+                                    attributes: ['productID', 'productName'],
                                     include: [
                                         {
                                             model: Category,
