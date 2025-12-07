@@ -24,6 +24,26 @@ const HTTP_INTERNAL_SERVER_ERROR = process.env.HTTP_INTERNAL_SERVER_ERROR;
 
 const sessionInfoStore = {}; // In-memory store for session info
 
+function valueProtoToJson(proto) {
+    if (!proto) return null;
+    if (proto.stringValue !== undefined) return proto.stringValue;
+    if (proto.numberValue !== undefined) return proto.numberValue;
+    if (proto.boolValue !== undefined) return proto.boolValue;
+    if (proto.structValue) return structProtoToJson(proto.structValue);
+    if (proto.listValue) return (proto.listValue.values || []).map(valueProtoToJson);
+    if (proto.nullValue !== undefined) return null;
+    return null;
+}
+
+function structProtoToJson(proto) {
+    if (!proto || !proto.fields) return {};
+    const result = {};
+    for (const key in proto.fields) {
+        result[key] = valueProtoToJson(proto.fields[key]);
+    }
+    return result;
+}
+
 class DialogFlowCXService {
     checkInventoryProduct(productId) {
         return new Promise(async (resolve, reject) => {
@@ -392,6 +412,27 @@ class DialogFlowCXService {
                                                 from: 'bot',
                                                 type: 'buttons',
                                                 buttons: buttons,
+                                            });
+                                        } else if (itemType === 'action' && itemOptionsArray) {
+                                            const buttons = itemOptionsArray.map((opt) => {
+                                                const fields = opt.structValue?.fields;
+                                                if (!fields) return {};
+
+                                                const label = fields.label?.stringValue;
+                                                const payload = fields.payload
+                                                    ? valueProtoToJson(fields.payload)
+                                                    : null;
+
+                                                return {
+                                                    label,
+                                                    payload,
+                                                };
+                                            });
+
+                                            frontendMessages.push({
+                                                from: 'bot',
+                                                type: 'actions',
+                                                actions: buttons,
                                             });
                                         }
                                     }
