@@ -5,18 +5,27 @@ dotenv.config();
 
 const HTTP_INTERNAL_SERVER_ERROR = process.env.HTTP_INTERNAL_SERVER_ERROR || 500;
 const HTTP_OK = process.env.HTTP_OK || 200;
+const HTTP_DUPLICATE = process.env.HTTP_DUPLICATE || 409;
 
 class SupplierController {
     // Tạo nhà cung cấp (check email trùng)
     async createSupplier(req, res) {
         try {
-            const { email } = req.body;
+            const { email, phoneNumber } = req.body;
             if (email) {
                 const supplierWithEmail = await SupplierService.getSupplierByEmail(email);
                 if (supplierWithEmail) {
                     return res
                         .status(HTTP_OK)
                         .json({ status: 'ERR', message: 'Email đã tồn tại với nhà cung cấp khác' });
+                }
+            }
+            if (phoneNumber) {
+                const phoneExist = await SupplierService.findSupplierByPhoneNumber(phoneNumber);
+                if (phoneExist?.supplier) {
+                    return res
+                        .status(HTTP_DUPLICATE)
+                        .json({ status: 'ERR', message: 'Số điện thoại đã tồn tại với nhà cung cấp khác' });
                 }
             }
             const { status, message, supplier } = await SupplierService.createSupplier(req.body);
