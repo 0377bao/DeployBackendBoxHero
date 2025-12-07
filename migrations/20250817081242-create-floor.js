@@ -18,7 +18,7 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                     references: {
-                        model: 'Shelves', // liên kết với bảng Shelves
+                        model: 'shelves', // liên kết với bảng Shelves
                         key: 'shelfID',
                     },
                     onUpdate: 'CASCADE',

@@ -10,7 +10,7 @@ module.exports = {
                     allowNull: false,
                     primaryKey: true,
                     references: {
-                        model: 'Batches', // bảng Batches (cần có migration trước)
+                        model: 'batches', // bảng Batches (cần có migration trước)
                         key: 'batchID',
                     },
                     onUpdate: 'CASCADE',
@@ -21,7 +21,7 @@ module.exports = {
                     allowNull: false,
                     primaryKey: true,
                     references: {
-                        model: 'Boxes', // bảng Boxes (cần có migration trước)
+                        model: 'boxes', // bảng Boxes (cần có migration trước)
                         key: 'boxID',
                     },
                     onUpdate: 'CASCADE',

@@ -39,7 +39,7 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                     references: {
-                        model: 'Floors', // tham chiếu bảng Floors
+                        model: 'floors', // tham chiếu bảng Floors
                         key: 'floorID',
                     },
                     onUpdate: 'CASCADE',
