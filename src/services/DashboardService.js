@@ -335,10 +335,10 @@ class DashboardService {
                         },
                     ],
                     attributes: [
-                        [Sequelize.col('Batch.Product.productID'), 'productID'],
+                        [Sequelize.col('batch.product.productID'), 'productID'],
                         [Sequelize.fn('SUM', Sequelize.col('quantityExported')), 'totalExportQty'],
                     ],
-                    group: ['Batch.Product.productID', 'Batch.Product.productName'],
+                    group: ['batch.product.productID', 'batch.product.productName'],
                     order: [[Sequelize.literal('totalExportQty'), 'DESC']],
                     limit: 5,
                 });
