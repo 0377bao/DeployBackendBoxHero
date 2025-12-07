@@ -50,7 +50,7 @@ class ShelfService {
                                     ],
                                 },
                             ],
-                            order: [[sequelize.literal('CAST(SUBSTRING(floor.floorID, 3) AS UNSIGNED)'), 'ASC']],
+                            order: [[sequelize.literal('CAST(SUBSTRING(floorID, 3) AS UNSIGNED)'), 'ASC']],
                         },
                     ],
                     order: [['createdAt']],
