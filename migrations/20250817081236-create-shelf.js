@@ -18,7 +18,7 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                     references: {
-                        model: 'Zones',
+                        model: 'zones',
                         key: 'zoneID',
                     },
                     onUpdate: 'CASCADE',
