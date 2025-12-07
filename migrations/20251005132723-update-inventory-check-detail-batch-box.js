@@ -25,7 +25,7 @@ module.exports = {
             type: 'foreign key',
             name: 'fk_inventorycheckdetail_batchID', // tên constraint
             references: {
-                table: 'batch_boxes',
+                table: 'batches',
                 field: 'batchID',
             },
             onUpdate: 'CASCADE',
@@ -37,7 +37,7 @@ module.exports = {
             type: 'foreign key',
             name: 'fk_inventorycheckdetail_boxID',
             references: {
-                table: 'batch_boxes',
+                table: 'boxes',
                 field: 'boxID',
             },
             onUpdate: 'CASCADE',
