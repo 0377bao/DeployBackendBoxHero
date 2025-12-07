@@ -313,36 +313,63 @@ class DashboardService {
     async getStaticTopProductExportInWarehouse() {
         return new Promise(async (resolve, reject) => {
             try {
-                const result = await OrderReleaseDetail.findAll({
+                // Step 1: Query top 5 products by export quantity
+                const topProducts = await OrderReleaseDetail.findAll({
+                    attributes: [
+                        [Sequelize.col('batch.product.productID'), 'productID'],
+                        [Sequelize.fn('SUM', Sequelize.col('quantityExported')), 'totalExportQty'],
+                    ],
                     include: [
                         {
                             model: Batch,
                             as: 'batch',
                             attributes: [],
+                            required: true,
                             include: [
                                 {
                                     model: Product,
                                     as: 'product',
-                                    attributes: ['productID', 'productName'],
-                                    include: [
-                                        {
-                                            model: Category,
-                                            as: 'category',
-                                            attributes: ['categoryID', 'categoryName'],
-                                        },
-                                    ],
+                                    attributes: [],
+                                    required: true,
                                 },
                             ],
                         },
                     ],
-                    attributes: [
-                        [Sequelize.col('batch.product.productID'), 'productID'],
-                        [Sequelize.fn('SUM', Sequelize.col('quantityExported')), 'totalExportQty'],
-                    ],
-                    group: ['batch.product.productID', 'batch.product.productName'],
+                    group: ['batch.product.productID'],
                     order: [[Sequelize.literal('totalExportQty'), 'DESC']],
                     limit: 5,
+                    raw: true,
                 });
+
+                // Step 2: Fetch full product details for these IDs
+                const productIDs = topProducts.map((item) => item.productID);
+                let products = [];
+                if (productIDs.length > 0) {
+                    products = await Product.findAll({
+                        where: { productID: productIDs },
+                        include: [
+                            {
+                                model: Category,
+                                as: 'category',
+                                attributes: ['categoryID', 'categoryName'],
+                            },
+                        ],
+                    });
+                }
+
+                // Step 3: Merge data to match expected structure
+                const result = topProducts.map((item) => {
+                    const productDetail = products.find((p) => p.productID === item.productID);
+                    return {
+                        productID: item.productID,
+                        totalExportQty: item.totalExportQty,
+                        batch: {
+                            // Mock batch wrapper to satisfy frontend structure expectation
+                            product: productDetail,
+                        },
+                    };
+                });
+
                 resolve({
                     status: 'OK',
                     statusHttp: HTTP_OK,
