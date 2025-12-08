@@ -13,5 +13,6 @@ router.get('/export/:id', authUser, ProductController.getProductCanExport);
 router.put('/update/:id', authUserIsManager, ProductController.updateProduct);
 router.post('/filter-option', authUser, ProductController.filterProduct);
 router.post('/create-product', authUserIsManager, ProductController.createProduct);
+router.post('/generate-qr', authUserIsManager, ProductController.generateQRForProducts);
 
 module.exports = router;

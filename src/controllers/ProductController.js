@@ -67,6 +67,14 @@ class ProductController {
             return res.status(err.statusHttp).json(err);
         }
     }
+    async generateQRForProducts(req, res) {
+        try {
+            const { statusHttp, ...response } = await ProductService.generateQRForProducts();
+            return res.status(statusHttp).json(response);
+        } catch (err) {
+            return res.status(err.statusHttp).json(err);
+        }
+    }
 }
 
 module.exports = new ProductController();

@@ -446,6 +446,36 @@ class ProductService {
             }
         });
     }
+
+    generateQRForProducts() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const products = await Product.findAll();
+                const updates = products.map(async (product) => {
+                    const qrCode = await generateQRURL(product.productID);
+                    product.qrCode = qrCode;
+                    return product.save();
+                });
+
+                await Promise.all(updates);
+
+                resolve({
+                    status: 'OK',
+                    statusHttp: HTTP_OK,
+                    message: 'Generated QR codes for all products successfully',
+                    data: products,
+                });
+            } catch (e) {
+                console.log(e);
+                reject({
+                    status: 'ERR',
+                    statusHttp: HTTP_INTERNAL_SERVER_ERROR,
+                    message: 'Error generating QR codes for products',
+                    error: e,
+                });
+            }
+        });
+    }
 }
 
 module.exports = new ProductService();
