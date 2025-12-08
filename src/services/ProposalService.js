@@ -85,7 +85,10 @@ class ProposalService {
                     message = 'Đề xuất đã được phê duyệt';
                     const batchMaxLength = await Batch.findAll({
                         attributes: ['batchID'],
-                        order: [['batchID', 'DESC']],
+                        order: [
+                            [fn('LENGTH', col('batchID')), 'DESC'],
+                            ['batchID', 'DESC'],
+                        ],
                         limit: 1,
                         transaction,
                     });
