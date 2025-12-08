@@ -90,7 +90,7 @@ class ProposalService {
                         transaction,
                     });
 
-                    let maxNumber = parseInt(batchMaxLength[0].batchID ? batchMaxLength[0].batchID.slice(1) : 0);
+                    let maxNumber = parseInt(batchMaxLength[0]?.batchID ? batchMaxLength[0]?.batchID.slice(1) : 0);
 
                     // update batchID for proposal detail
                     for (let index = 0; index < proposalDetails.length; index++) {
