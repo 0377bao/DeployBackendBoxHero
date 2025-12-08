@@ -263,6 +263,7 @@ class DialogFlowCXService {
                         sessionInfo: {
                             parameters: {
                                 create_proposal_result: `Tác vụ hoàn tất.Tôi đã tạo phiếu đề xuất thành công với ID: ${createResult.proposal.proposalID}`,
+                                proposalID: createResult.proposal.proposalID,
                             },
                         },
                     });
