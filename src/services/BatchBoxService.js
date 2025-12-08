@@ -421,10 +421,12 @@ class BatchBoxService {
                                 boxExist.status = 'OCCUPIED';
                             }
                             await boxExist.save({ transaction });
+
+                            // Cập nhật số lượng tempAmount và validAmount của batch
+                            batch.tempAmount -= quantity;
+                            batch.validAmount += quantity;
+                            await batch.save({ transaction });
                         }
-                        batch.tempQuantity = 0;
-                        batch.validQuantity = batch.importAmount;
-                        await batch.save({ transaction });
                     }
                 }
                 await transaction.commit();
