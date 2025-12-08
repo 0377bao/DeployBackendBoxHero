@@ -121,6 +121,7 @@ class BatchService {
                     ],
                     where: {
                         ...whereCondition,
+                        status: 'AVAILABLE',
                         batchID: {
                             [db.Sequelize.Op.notIn]: db.sequelize.literal(
                                 '(SELECT DISTINCT batchID FROM batch_boxes WHERE batchID IS NOT NULL)',
@@ -158,6 +159,7 @@ class BatchService {
             try {
                 const count = await Batch.count({
                     where: {
+                        status: 'AVAILABLE',
                         batchID: {
                             [db.Sequelize.Op.notIn]: db.sequelize.literal(
                                 '(SELECT DISTINCT batchID FROM batch_boxes WHERE batchID IS NOT NULL)',
