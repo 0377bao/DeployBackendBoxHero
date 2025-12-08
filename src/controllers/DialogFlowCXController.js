@@ -34,12 +34,10 @@ class DialogFlowCXController {
                     return res.status(HTTP_OK).json(response);
                 }
                 case dialogFlowConstant.CREATE_PROPOSAL_FOR_LOW_INVENTORY: {
-                    const { employee_code = 'EP1', number_proposal, proposal_suggested } = params;
-
-                    console.log(employee_code, number_proposal, proposal_suggested);
+                    const { employeeID, number_proposal, proposal_suggested } = params;
 
                     const response = await DialogFlowCXService.createProposalForInventoryLow(
-                        employee_code,
+                        employeeID,
                         number_proposal,
                         proposal_suggested,
                     );
