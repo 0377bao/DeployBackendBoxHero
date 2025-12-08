@@ -375,6 +375,7 @@ class BatchBoxService {
                                     ],
                                 },
                             ],
+                            transaction,
                         });
 
                         if (!boxExist) {
