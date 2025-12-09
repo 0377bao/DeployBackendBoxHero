@@ -69,7 +69,7 @@ class AccountService {
                 // Check email tồn tại
                 const accountFind = await Account.findOne({ where: { email } });
                 if (accountFind) {
-                    resolve({
+                    return reject({
                         statusHttp: HTTP_BAD_REQUEST,
                         status: 'ERR',
                         message: 'Email đã tồn tại',
@@ -79,10 +79,38 @@ class AccountService {
                 // check employee tồn tại
                 const employeeFind = await Employee.findOne({ where: { employeeID } });
                 if (employeeFind) {
-                    resolve({
+                    return reject({
                         statusHttp: HTTP_BAD_REQUEST,
                         status: 'ERR',
                         message: 'Nhân viên đã tồn tại',
+                    });
+                }
+
+                // check phone number
+                const phoneExist = await Employee.findOne({
+                    where: {
+                        phoneNumber,
+                    },
+                });
+                if (phoneExist) {
+                    return reject({
+                        statusHttp: HTTP_BAD_REQUEST,
+                        status: 'ERR',
+                        message: 'Số điện thoại đã tồn tại',
+                    });
+                }
+
+                // check cccd
+                const cccdExist = await Employee.findOne({
+                    where: {
+                        cccd,
+                    },
+                });
+                if (cccdExist) {
+                    return reject({
+                        statusHttp: HTTP_BAD_REQUEST,
+                        status: 'ERR',
+                        message: 'CCCD đã tồn tại',
                     });
                 }
 
