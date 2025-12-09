@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const Customer = db.Customer;
 const OrderRelease = db.OrderRelease;
 const OrderReleaseDetail = db.OrderReleaseDetail;
+const OrderReleaseBatchBoxDetail = db.OrderReleaseBatchBoxDetail;
+const BaseUnitProduct = db.BaseUnitProduct;
 const Employee = db.Employee;
 const Product = db.Product;
 const Batch = db.Batch;
@@ -111,6 +113,10 @@ class CustomerService {
                             as: 'orderReleaseDetails',
                             include: [
                                 {
+                                    model: OrderReleaseBatchBoxDetail,
+                                    as: 'orderReleaseBatchBoxDetails',
+                                },
+                                {
                                     model: Batch,
                                     as: 'batch',
                                     // attributes: ['batchID', 'productID'],
@@ -119,6 +125,13 @@ class CustomerService {
                                             model: Product,
                                             as: 'product',
                                             attributes: ['productID', 'productName'],
+                                            include: [
+                                                {
+                                                    model: BaseUnitProduct,
+                                                    as: 'baseUnitProducts',
+                                                    attributes: ['baseUnitProductID', 'baseUnitName'],
+                                                },
+                                            ],
                                         },
                                         {
                                             model: Unit,
