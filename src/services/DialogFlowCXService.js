@@ -227,10 +227,7 @@ class DialogFlowCXService {
                     return resolve({
                         sessionInfo: {
                             parameters: {
-                                low_inventory_result:
-                                    `Các sản phẩm có tồn kho thấp:\n\n` +
-                                    lowInventoryDetails +
-                                    `\nBạn có muốn tôi tạo giúp bạn phiếu đề xuất nhập các sản phẩm này không?`,
+                                low_inventory_result: `Các sản phẩm có tồn kho thấp:\n\n` + lowInventoryDetails,
                                 proposal_suggested: lowInventoryProducts.data.map((p) => p.productID),
                             },
                         },
